@@ -1,5 +1,6 @@
 ###LAB02####
 
+library("gtools")
 
 m <- 2
 n <- 4
