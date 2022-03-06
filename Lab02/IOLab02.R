@@ -5,35 +5,36 @@ m <- 2
 n <- 4
 v <- c(2,1,1,8,1,1,2,4)
 b <- c(6,4)
-A <- matrix(v, nrow = 2, byrow = TRUE) #Solo exite byrow.
-AI <- cbind(A, diag(m)) # cbind(X,Y): Concatenar (por columnas)la matriz 
-                  #Y en la matriz X || diag(m) : Matriz identidad de mxm
+A <- matrix(v, nrow = 2, byrow = TRUE)
+AI <- cbind(A, diag(m)) 
 print(AI)
 
 
 
-calcula_sb <- function(M,J,b){ #Aunk m y n estén en otro chunck se pueden usar dentro de function
-  aux <- M[ , J] #J es un vector 
-  solucion <- rep(0, m+n) #m+n son la cantidad de columnas que hay (y de variables + holguras !!!!!) || rep(x,y) repite x, y veces
-  if(det(aux) == 0){ return(F) }
+calcula_sb <- function(M,J,b){ 
+  aux <- M[ , J] 
+  solucion <- rep(0, m+n)
+  if(det(aux) == 0){ 
+    return(F) 
+  }
   
-  solucion[J] <- solve(aux, b) #solve devuelve m valores || si pillas columnas no basicas peta el solve
+  solucion[J] <- solve(aux, b) 
   
   return(solucion) 
 }
 
-calcula_sb(AI, c(1,2), b) #c(1,2) es el vector que pilla los valores que hay en las columnas 1 y 2 en la matriz AI
+calcula_sb(AI, c(1,2), b)
 
 
 
 
-ncom <- choose(m+n, m) #??????????
-combinations(n+m, m) -> combi #Combinación de n+m en m es la cantidad de soluciones básicas 
-#OJO combinatons es de la librería gtools, hay que instalar desde la pestaña packajes -> install y escribes gtools
+ncom <- choose(m+n, m)
+combinations(n+m, m) -> combi
+
 combi
 
 
-for (i in 1 : nrow(C)) { #PARA SACAR TODAS LAS SOLUCIONES BÁSICAS
+for (i in 1 : nrow(C)) {
   sb <- calcula_sb(AI, C[i, ], b)
   print(sb)
 }
