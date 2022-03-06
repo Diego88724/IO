@@ -29,9 +29,9 @@ calcula_sb(AI, c(1,2), b)
 
 
 ncom <- choose(m+n, m)
-combinations(n+m, m) -> combi
+combinations(n+m, m) -> C
 
-combi
+C
 
 
 for (i in 1 : nrow(C)) {
