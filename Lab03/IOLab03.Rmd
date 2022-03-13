@@ -1,0 +1,141 @@
+---
+title: "Lab03-22"
+author: "Diego Fernández"
+date: "7 de marzo de 2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## LECTURA DE DATOS
+Escribir una función que lea los datos de un archivo y los organice en una lista.
+
+```{r}
+
+
+setwd("C://Users//diego//OneDrive//Escritorio//Universidad//2º Curso//2//Investigacion Operativa//Laboratorios//Lab03//2022")
+
+datos_a_lista <- function (archivo="datos"){
+ 
+  datos <- read.table(archivo)
+  
+  print(datos)
+  n <- ncol(datos)-2
+  m <- nrow(datos)-1
+  lista <- list(n=n, m=m)
+  
+  lista$A <- as.matrix(datos[1:m,1:n])
+  lista$AI <- cbind(lista$A,diag(datos[1:m,n+1]))
+  lista$b <- as.numeric(datos[1:m,n+2])
+  lista$c <- (datos[m+1,1:n])
+  #opt= óptimo: min o max
+  lista$opt <- as.matrix(datos[m+1,n+1])
+  lista$datos <- as.matrix(datos[m+1,n+2])
+  
+  
+ return(lista)
+
+}
+
+datos_a_lista() -> problema
+
+```
+
+
+# Cálculo de soluciones básicas
+Copiar aqui el código generado en el laboratorio anterior
+
+
+```{r}
+library("gtools")
+m <- 2
+n <- 4
+v <- c(2,1,1,8,1,1,2,4)
+b <- c(6,4)
+A <- matrix(v, nrow = 2, byrow = TRUE)
+AI <- cbind(A, diag(m))
+
+
+
+
+calcula_sb <- function(M,J,b){
+
+aux <- M[ , J]
+solucion <- rep(0, m+n)
+if(det(aux) == 0){ 
+  return(F) 
+  }
+solucion[J] <- solve(aux, b)
+return(solucion)
+}
+calcula_sb(AI, c(1,2), b)
+
+
+ncom <- choose(m+n, m)
+combinations(n+m, m) -> C
+
+
+for (i in 1 : nrow(C)) {
+sb <- calcula_sb(AI, C[i, ], b)
+print(sb)
+}
+
+```
+
+Usar la funcion "apply" para generar TODAS las soluciones básicas.
+
+```{r}
+library("gtools")
+
+
+
+
+calcula_sb <- function(J){
+  
+M<-problema$AI
+b<-problema$b
+n<-problema$n
+m<-problema$m
+
+  aux <- M[ , J] 
+  solucion <- rep(0, m+n) 
+  if(det(aux) == 0){ return(F) }
+  
+  solucion[J] <- solve(aux, b)
+   
+  return(solucion) 
+}
+
+
+ncom <- choose(m+n, m) 
+combinations(n+m, m) -> C 
+
+
+
+COM<-combinations(problema$n+problema$m,problema$m)
+apply(COM, 1, calcula_sb)
+
+
+
+```
+
+
+
+# Cálculo del optimo
+
+A partir de la lista de puntos anterior, seleccionar las soluciones factibles básicas y, usando los costes, calcular el punto donde la función objetivo  toma el valor optimo.
+
+```{r}
+calcula_opt<-function(lista)
+  if(min(lista$i)>0){
+    
+  }
+
+```
+
+
+
