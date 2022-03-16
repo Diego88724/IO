@@ -1,0 +1,13 @@
+Previamente, en un archivo .R tendremos (*) una función que, a partir de un archivo de datos (**), genere una lista con los vectores y matrices necesarios para resolver el problema lineal.
+
+leer_datos <- function(archivo){
+
+.....
+
+return(lista)
+
+}
+
+(*) entregarla antes del miércoles para su revisión
+
+(**) el formato es el que usamos en el laboratorio 2. 

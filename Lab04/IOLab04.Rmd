@@ -1,0 +1,68 @@
+---
+title: "Lab04-22"
+author: "Diego Fernández"
+date: "15/3/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+#Importante instalar antes el paquete lpSolverAPI
+
+library("lpSolveAPI")
+
+
+datos_a_lista <- function (archivo="datos"){
+ 
+  datos <- read.table(archivo)
+  
+  print(datos)
+  n <- ncol(datos)-2 #n filas
+  m <- nrow(datos)-1 # m columnas
+  lista <- list(n=n, m=m) #genera una lista vacia
+
+  lista$A <- as.matrix(datos[1:m,1:n]) #genera A
+  lista$AI <- cbind(lista$A,diag(datos[1:m,n+1]))
+  lista$b <- as.numeric(datos[1:m,n+2]) #toma valores de b
+  lista$c <- (datos[m+1,1:n])
+  lista$opt <- as.matrix(datos[m+1,n+1])
+  lista$datos <- as.matrix(datos[m+1,n+2])
+  return(lista)
+}
+
+lista <- datos_a_lista()
+lista
+```
+
+
+```{r}
+lista$n->n
+lista$m->m
+
+make.lp(m,n)-> Objeto #genera la matriz con lpSolveAPI
+
+print(Objeto) #la imprime
+
+for (j in 1:n){ #carga las columnas de A
+set.column(Objeto,j,lista$A[ , j])
+}
+
+
+
+set.objfn(Objeto,lista$c)
+set.constr.value(Objeto,rhs=lista$b, constraints = 1:m)
+set.constr.type(Objeto,c("=",">=","<="))
+
+
+solve(Objeto)
+
+
+print(get.variables(Objeto))
+print(get.objective(Objeto))
+print(Objeto)
+```
+
