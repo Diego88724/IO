@@ -1,0 +1,78 @@
+---
+title: "Lab05-22"
+author: "Diego Fernández"
+date: "29/3/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Importante instalar antes el paquete lpSolverAPI
+
+library("lpSolveAPI")
+
+
+datos_a_lista <- function (archivo="datos2"){
+ 
+  datos <- read.table(archivo)
+  
+  print(datos)
+  n <- ncol(datos)-2 #n filas
+  m <- nrow(datos)-1 # m columnas
+  lista <- list(n=n, m=m) #genera una lista vacia
+
+  lista$A <- as.matrix(datos[1:m,1:n]) #genera A
+  lista$AI <- cbind(lista$A,diag(datos[1:m,n+1]))
+  lista$b <- as.numeric(datos[1:m,n+2]) #toma valores de b
+  lista$c <- (datos[m+1,1:n])
+  lista$opt <- as.matrix(datos[m+1,n+1])
+  lista$datos <- as.matrix(datos[m+1,n+2])
+  lista$direccion<-datos[1:m,n+1]
+  return(lista)
+}
+
+lista <- datos_a_lista()
+lista
+```
+
+
+```{r}
+lista$n->n
+lista$m->m
+
+lista$direccion -> vDirec
+
+
+
+make.lp(m,n) -> objeto #genera la matriz con lpSolveAPI
+print(objeto)
+if(lista$op=="max")lp.control(objeto,sense="max")->control
+for (j in (1:lista$n)){
+set.column(objeto, j, lista$A[,j])
+}
+
+
+set.objfn(objeto,lista$c)
+set.constr.value(objeto,rhs=lista$b, constraints = 1:m)
+set.constr.type(objeto,vDirec)
+
+
+solve(objeto)
+res <-solve(objeto)
+if(res ==0) print("Solucion única ")
+if(res ==1) print("Solucion subóptima")
+if(res ==2) print("Solucion infactible")
+if(res ==3) print("Solucion no acotado")
+if(res ==4) print("Solucion degenerado")
+if(res > 4) print("Solucion otros errores")
+
+print(get.variables(objeto))
+print(get.objective(objeto))
+print(objeto)
+
+
+```
+
