@@ -1,7 +1,0 @@
-Trabajaremos con problemas de grafos: GCP, MIS, MDS .
-
-Definimos un grafo con la librería "igraph".
-
-Generamos una solución aleatoria.
-
-La mejoramos recorriendo sus vecinos.
