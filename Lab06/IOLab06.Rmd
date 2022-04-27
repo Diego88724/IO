@@ -1,0 +1,135 @@
+---
+title: "Lab06_22"
+author: "Diego Fernández"
+date: "27/4/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## INSTALACIÓN DE METAHEUR
+```{r}
+
+
+library(ggplot2)
+setwd("C://Users//diego//OneDrive//Escritorio//Universidad//2º Curso//2//Investigacion Operativa//Laboratorios//Lab06//2022")
+#install.packages("metaheuR_0.3.tar.gz", repos=NULL,type="source")
+library(metaheuR)
+```
+
+## PROBLEMA KSP (MOCHILA)
+
+```{r}
+
+
+n <- 8
+peso <- runif(n, 0, 100)
+valores <- runif(n, 0, 100)
+p <- sum(peso)/2
+
+mochila <- knapsackProblem(peso, valores, p)
+
+
+
+#SOLUCIONES
+
+solu <- sample(c(TRUE, FALSE), n, replace = TRUE)
+solu
+barplot(solu)
+
+
+
+mochila$evaluate(solu)
+mochila$valid(solu)
+mochila$correct(solu) -> b
+barplot(b)
+```
+
+## PROBLEMA TSP (AGENTE VIAJERO)
+```{r}
+n <- 6 #n ciudades
+M <- matrix(runif(n*n, 0, 100), n)
+M
+x <- runif(n, 0, 100)
+y <- runif(n, 0, 100)
+plot(x,y)
+
+
+tspProblem(M,cbind(x,y)) -> tspP
+
+#solucion
+  
+  permutation(1:n) ->a
+  randomPermutation(n) ->b
+  tspP$evaluate(a)  
+  tspP$plotSolution(a)
+  
+  tspP$evaluate(b)  
+  tspP$plotSolution(b)
+
+
+
+
+# 
+# read.table("xyz.txt")->xyz
+# n<- nrow(xyz)
+# x<- xyz[,1]
+# y<- xyz[,2]
+# 
+# 
+# costes<-read.table( "costes.txt")
+# 
+# TSP <- tspProblem(costes, xyz)
+# k<- n
+# 
+# #elegir k ciudades
+# 
+# k<- n
+#  
+# ruta <- sample(1:n,k)
+# TSP <- tspProblem(costes[ruta,ruta], xyz[ruta,])
+# 
+# print(TSP$plotSolution(permutation(1:k),plot.names = TRUE))
+# print(TSP$evaluate(permutation(1:k)))
+# 
+# 
+# sol_ini <- 1:k
+# sol_ini <- sample(k)
+# z_ini <- TSP$evaluate(permutation(sol_ini))
+# print(paste("valor inicial",z_ini))
+# 
+# print(TSP$plotSolution(permutation(sol_ini),plot.names = TRUE))
+
+
+```
+
+
+## PROBLEMA GCP (COLOREADO DE GRAFOS)
+```{r}
+library(igraph)
+n <- 8
+p <- 0.5
+
+
+grafo <- random.graph.game(n, p)
+grafo
+colores <- graphColoringProblem(grafo)
+
+#soluciones
+
+vector <- sample(1:n, n, replace=T)
+sol <- factor(vector)
+
+
+colores$evaluate(sol)
+colores$valid(sol)
+colores$correct(sol) 
+colores$plot(sol)
+
+
+
+```
+
