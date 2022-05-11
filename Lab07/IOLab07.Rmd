@@ -1,0 +1,150 @@
+---
+title: "Lab07_22"
+author: "Diego Fernández"
+date: "11/5/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+setwd("C://Users//diego//OneDrive//Escritorio//Universidad//2º Curso//2//Investigacion Operativa//Laboratorios//Lab07//2022")
+#install.packages("metaheuR_0.3.tar.gz", repos=NULL,type="source")
+library(metaheuR)
+```
+
+
+
+```{r}
+n <- 100
+
+valor<-runif(n, 0, 100)
+peso<-runif(n, 0, 100)
+  
+limite<-sum(peso)/2
+  
+knp<-knapsackProblem(peso,valor,limite)  
+
+sol0<-rep(F,n)
+sol1 <- sample (c(T,F),n,replace=T)
+barplot(sol1)
+sol2 <- rep(T,n)
+
+
+validacion <- knp$valid(sol1)
+evaluacion <- knp$evaluate(sol1)
+correccion <- knp$correct(sol1)
+
+barplot(correccion)
+
+solini <- sol1
+solini
+
+
+#buscar vecinos
+
+if(knp$valid(solini)==F){    #Definir solución inicial 
+  solini <- knp$correct(solini) #hay que partir de una solución inicial válida
+}
+solopt <- solini
+zopt <- abs(knp$evaluate(solopt))    #Calcular zopt
+
+  aux <- solini
+  z_opt <- abs(knp$evaluate(aux))
+
+  for (j in 1:n){
+
+    aux2 <- solini
+    aux2[j] <- !aux2[j]
+
+
+    if(knp$valid(aux)){
+    zaux <- abs(knp$evaluate(aux2))
+      if(zaux>z_opt){
+      sol_opt <- aux2
+      zopt <- zaux
+      print(zopt)
+      }
+    }
+
+
+  }
+
+
+
+
+
+```
+
+
+
+
+
+```{r}
+
+
+n <- 7
+
+matriz <- matrix(runif(n*n),n)
+
+x <- runif(n)
+y <- runif(n)
+
+xy <- cbind(x,y)
+
+objeto <- tspProblem(matriz,xy)
+
+sol2 <- randomPermutation(n)
+
+evaluacion2 <- objeto$evaluate(sol2)
+objeto$plotSolution(sol2)
+
+###VECINO MEJOR
+
+
+
+solini <- sol2
+
+vecino_mejor <- function(solini, primer){
+  
+  solopt <- solini
+  
+  zopt <- abs(objeto$evaluate(solopt))
+  
+  for(i in 1:(n-1)){
+    
+    for(j in (i+1):n){
+      
+      aux <- swap(solini,i,j)
+      
+      abs(objeto$evaluate(aux)) -> zaux
+      
+      if(zaux < zopt){
+        
+        solopt <- aux
+        zopt <- zaux
+        
+        if(primer){
+          return(solopt)
+        }
+        
+      }
+    }
+  }
+
+  return(solopt)
+}
+
+
+vecino <- vecino_mejor(solini, FALSE)
+
+objeto$plotSolution(vecino)
+
+
+
+
+```
+
