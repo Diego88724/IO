@@ -1,0 +1,118 @@
+---
+title: "Lab08_22"
+author: "Diego Fernández"
+date: "11/5/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+setwd("C://Users//diego//OneDrive//Escritorio//Universidad//2º Curso//2//Investigacion Operativa//Laboratorios//Lab08")
+#install.packages("metaheuR_0.3.tar.gz", repos=NULL,type="source")
+library(metaheuR)
+```
+
+
+
+# MOCHILA
+
+```{r}
+#KSP 
+
+n<-25
+peso<-runif(n,0,100)
+valor<-runif(n,0,100)
+limite<- sum(peso)/2
+
+knapsackProblem(peso,valor,limite) -> knp
+
+
+#SOLUCIONES
+
+sol1 <-rep(F,n)
+sol2 <-sample(c(T,F),n,replace=T)
+sol3 <-rep(T,n)
+
+
+sol<- sol2
+
+  barplot(sol)
+  knp$valid(sol)
+  knp$evaluate(sol)
+  
+  knp$correct(sol) -> sol
+  knp$valid(sol)
+  knp$evaluate(sol)
+  barplot(sol)
+  
+  solini<-sol
+
+
+```
+```{r}
+basicLocalSearch(
+  evaluate= knp$evaluate,
+  initial.solution=solini,
+  neighborhood=flipNeighborhood(solini), 
+  selector = firstImprovementSelector,
+
+  
+  do.log = TRUE, 
+  save.sols = FALSE, 
+  verbose = TRUE,
+  non.valid = "correct", 
+  valid = knp$valid, 
+  correct = knp$correct ) -> optimo_local
+  soluc <- optimo_local@solution
+
+  z<-optimo_local@evaluation
+```
+
+# VIAJERO
+
+```{r}
+
+n <- 8
+
+matriz <- matrix(runif(n*n,0,100),n)
+x <- runif(n,0,100)
+y <- runif(n,0,100)
+plot(x,y)
+
+tspProblem(matriz,cbind(x,y)) -> tspP
+ 
+   ##Soluciones (permutaciones n! o (n-1)!)
+  
+  permutation(1:n) ->a
+  randomPermutation(n) ->b
+  tspP$evaluate(a)  
+  tspP$plotSolution(a)
+  
+  tspP$evaluate(b)  
+  tspP$plotSolution(b)
+  
+ solini<-a
+
+
+```
+```{r}
+basicLocalSearch(
+  evaluate= tspP$evaluate,
+  initial.solution=solini, 
+  neighborhood=swapNeighborhood(solini),
+  selector = firstImprovementSelector,
+
+  
+  do.log = TRUE, 
+  save.sols = FALSE, 
+  verbose = TRUE ) -> optimo_local
+  soluc <- optimo_local@solution
+
+  z<-optimo_local@evaluation
+```
+
+
